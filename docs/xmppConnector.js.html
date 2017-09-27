@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: xmppConnector.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: xmppConnector.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+* UserExists event
+*
+* @event xmppConnector#UserExists
+* @desc This is the event fired once a message containing the users pincode is received
+* @type {String}
+* @property {String} message - The message received
+*/
+/**
+* UserExists event
+*
+* @event xmppConnector#userInfoUpdated
+* @desc This is the event fired once a message confirming the update of the user's profile info is received
+* @type {String}
+* @property {String} message - The message received
+*/
+/**
+* pokePassenger event
+*
+* @event xmppConnector#pokePassenger
+* @desc This is the event fired once a message to inform a passenger that a driver has arrived is received
+* @type {String}
+* @property {String} message - The message received
+*/
+/**
+* updateUserInfo event
+*
+* @event xmppConnector#updateUserInfo
+* @desc This is the event fired once a message that a user's information are successfully updated is received
+* @type {String}
+* @property {String} message - The message received
+*/
+/**
+* RegWithPin event
+*
+* @event xmppConnector#RegWithPin
+* @desc This is the event fired once a message with a successfull registration of the user in the database is received
+* @type {String}
+* @property {String} message - The message received
+*/
+/**
+* countries event
+*
+* @event xmppConnector#countries
+* @desc This is the event fired once a message containing all of the countries available for registration is received
+* @type {String}
+* @property {String} message - The message received
+*/
+/**
+* ForgetPin event
+*
+* @event xmppConnector#ForgetPin
+* @desc This is the event fired once a message containing a user's new password, after he has requested a new one, is received
+* @type {String}
+* @property {String} message - The message received
+*/
+/**
+* gotHistory event
+*
+* @event xmppConnector#gotHistory
+* @desc This is the event fired once a message with a user's triphistory info is received
+* @type {String}
+* @property {String} message - The message received
+*/
+/**
+* cancelTrip event
+*
+* @event xmppConnector#cancelTrip
+* @desc This is the event fired once a message confirming the cancelation of a trip is received or the passenger no show action from the server
+* @type {String}
+* @property {String} message - The message received
+*/
+/**
+* profileInfo event
+* 
+* @event xmppConnector#profileInfo
+* @desc This is the event fired once a message containing the user's information is received
+* @type {String}
+* @property {String} message - The message received
+*/
+/**
+* gotAppoints event
+* 
+* @event xmppConnector#gotAppoints
+* @desc This is the event fired once a message containing the user's appointments is received
+* @type {String}
+* @property {String} message - The message received
+*/
+/**
+* callAssigned event
+* 
+* @event xmppConnector#callAssigned
+* @desc This is the event fired once a message confirming the assignment of a driver to a call is received
+* @type {String}
+* @property {String} message - The message received
+*/
+/**
+* noDriver event
+* 
+* @event xmppConnector#noDriver
+* @desc This is the event fired once a message that there is no available driver is received
+* @type {String}
+* @property {String} message - The message received
+*/
+/**
+* callComplete event
+* 
+* @event xmppConnector#callComplete
+* @desc This is the event fired once a message that a call has completed is received
+* @type {String}
+* @property {String} message - The message received
+*/
+/**
+* passengerPickup event
+* 
+* @event xmppConnector#passengerPickup
+* @desc This is the event fired once a message that a passenger has been picked up by a driver is received
+* @type {String}
+* @property {String} message - The message received
+*/
+/**
+* appointmentRegistered event
+* 
+* @event xmppConnector#appointmentRegistered
+* @desc This is the event fired once a message that an appointment was placed successfully is received
+* @type {String}
+* @property {String} message - The message received
+*/
+/**
+* appointmentCanceled event
+* 
+* @event xmppConnector#appointmentCanceled
+* @desc This is the event fired once a message that an appointment was cancelled successfully is received
+* @type {String}
+* @property {String} message - The message received
+*/
+/**
+* appointmentStatusChanged event
+* 
+* @event xmppConnector#appointmentStatusChanged
+* @desc This is the event fired once a message that an appointment's status is changed is received
+* @type {String}
+* @property {String} message - The message received
+*/
+/**
+* appointmentCanceled event
+* 
+* @event xmppConnector#appointmentCanceled
+* @desc This is the event fired once a message that an appointment was cancelled successfully is received
+* @type {String}
+* @property {String} message - The message received
+*/
+/**
+* passBlacklist event
+* 
+* @event xmppConnector#passBlacklist
+* @desc This is the event fired once a message that a passenger is blacklisted, after a placing a new call, is received
+* @type {String}
+* @property {String} message - The message received
+*/
+/**
+* callReceipt event
+* 
+* @event xmppConnector#callReceipt
+* @desc This is the event fired once a message that a call has been successfully placed is received
+* @type {String}
+* @property {String} message - The message received
+*/
+/**
+* receivedFixedLocations event
+* 
+* @event xmppConnector#receivedFixedLocations
+* @desc This is the event fired once a message that contains all of the user's fixed locations
+* @type {String}
+* @property {String} message - The message received
+*/
+
+/**
+* LoginPass event
+* 
+* @event xmppConnector#LoginPass
+* @desc This is the event fired once the message containing the user's password is received
+* @type {String}
+* @property {String} message - The message received
+*/
+
+var xmpp=require('UserClass/xmppConnect/xmpp1/JXMPP');
+var name;
+var pass;
+var loc;
+var connected;
+var that;
+var type,repeat;
+var messageReceived=false;
+var dispatch=require('libs/dispatcher');
+var imei=Ti.App.installId;
+var messageSubmitWaitView;
+	if(Ti.Platform.osname=='android'){imei=require('ro.mihaiblaga.imei');imei=imei.getImei();}
+/**
+ * @author Aggelos Papageorgiou
+ */
+/**
+ * @class This is a class that is used as an interface to the XMPP Module for our application
+ * It holds all of the main functions called from the application
+ * @constructor
+ * @memberof module:JXMPP
+ */	
+	
+function xmppConnector(){
+	/**
+	 * @private
+	 */
+	this._events = new Array();
+	this.con = new xmpp.Connection();
+	setupCon(this.con);
+	this.name;
+	this.lastMessage=[];
+	that=this;
+}
+
+/**
+ * This function is used to initiate a connection to the XMPP Aploon Server, this function also creates a window that is added to the UI of the app to inform of any connections/disconnections
+ * @param {String} name - the username with which you will connect to the server
+ * @param {String} pass -  the password which will be used to connect to the server
+ * @param {String} res - The resource with which you will connect to the server
+ */
+xmppConnector.prototype.connect= function(name,pass,res){
+	// setup args for connect method
+	connectingView(); //show connecting window
+	oArgs = new Object();
+	oArgs.host = "staging.aploon.com"; //our server
+	oArgs.domain = "driver.taxiplon.com"; //our webaddress
+	oArgs.username = name;
+	oArgs.resource = res;
+	oArgs.pass = pass;
+	oArgs.authtype='tls';
+	oArgs.secure=true;
+	oArgs.enableCompression=false;
+	oArgs.register = false;
+	oArgs.allow_plain=false;
+	oArgs.autoPing=true;
+	if(!this.con.connect(oArgs))var reconnect=setInterval(function(){if(thing.connect(oArgs)==true)clearInterval(reconnect);},1000);
+	this.connected=true;
+	thing=this.con;
+	this.name=name;
+	return true;
+};
+
+/**
+ * This function is used to send a XMPP message from the application, it can also create and show a window on the UI if a delay of more than 3 seconds. 
+ * @param {String} message - the message to be sent to the xmpp service
+ * 
+ */
+xmppConnector.prototype.send=function(message){
+	Ti.API.info(message.string);
+	type=message.type;
+	messageReceived=false;
+	setTimeout(function(){
+		if(messageReceived!=true){
+		if(Ti.Platform.name=='iPhone OS'){
+			submitViewiOS();
+		}else{
+			var dialog=Ti.UI.createNotification({
+				message:L('networkDelay'),
+				duration: Ti.UI.NOTIFICATION_DURATION_LONG
+			});
+			dialog.show();
+		}
+		}
+	},5000);
+	if(sendMsg(message.string))
+	return true;
+
+};
+/**
+ * This function is used to terminate a connection to the server without retrying to connect
+ */
+xmppConnector.prototype.disconnect=function(){
+	thing.disconnect(false);
+	while(thing._connected);
+	this.connected=false;
+	thing=null;
+	this.con=null;
+	this.con = new xmpp.Connection();
+	thing=this.con;
+	return;
+
+};
+
+/**
+ * Registers an event handler (callback) for this connection.
+
+ * &lt;p>Note: All of the packet handlers for specific packets (like
+ * message_in, presence_in and iq_in) fire only if there's no
+ * callback associated with the id.&lt;br>
+
+ * &lt;p>Example:&lt;br/>
+ * &lt;code>con.registerHandler('iq', 'query', 'jabber:iq:version', handleIqVersion);&lt;/code>
+
+ * @param {String} event One of
+
+ * &lt;ul>
+ * &lt;li>onConnect - connection has been established and authenticated&lt;/li>
+ * &lt;li>onDisconnect - connection has been disconnected&lt;/li>
+ * &lt;li>onResume - connection has been resumed&lt;/li>
+
+ * &lt;li>onStatusChanged - connection status has changed, current
+ * status as being passed argument to handler. See {@link #status}.&lt;/li>
+**/
+xmppConnector.prototype.handlerRegistration = function(event) {
+	event = event.toLowerCase();
+	// don't be case-sensitive here
+	var eArg = {
+		handler : arguments[arguments.length - 1],
+		childName : '*',
+		childNS : '*',
+		type : '*'
+	};
+	if (arguments.length > 2)
+		eArg.childName = arguments[1];
+	if (arguments.length > 3)
+		eArg.childNS = arguments[2];
+	if (arguments.length > 4)
+		eArg.type = arguments[3];
+	if (!this._events[event])
+		this._events[event] = new Array(eArg);
+	else
+		this._events[event] = this._events[event].concat(eArg);
+	dispatch.on(event,eArg.handler);
+	Ti.API.debug("registered handler for event '" + event + "'");
+};
+/**
+ * remove an event handler for a specific event
+ * @param {String} event - the event from which to remove a handler
+ * @param {Function} handler - the event handler to be removed from the event
+ */
+xmppConnector.prototype.unregisteringHandler = function(event, handler) {
+		event = event.toLowerCase();
+	// don't be case-sensitive here
+	Ti.API.info("unregistered handler for event '" + event + "'");
+	dispatch.off(event,handler);
+};
+
+/**
+ * @private
+ * This function fires any of this class's events
+ * @param {String} event - the event to trigger
+ * @param {Any} arg - the argument to pass to the handler(s) of the event
+ */
+xmppConnector.prototype._handlingEvent = function(event, arg) {
+	event = event.toLowerCase();
+	// don't be case-sensitive here
+	Ti.API.info("incoming event '" + event + "'");
+	dispatch.trigger(event,arg);
+};
+
+/**
+ * @private
+ * This function is used to categorize each message according to its content in order to fire the appropriate event
+ * @param {Object} message - the message to be categorized
+ */
+xmppConnector.prototype._handleMessages=function(message){
+	var index=message.indexOf('body');
+	var temp=message.substr(index+6);
+	if(message.indexOf('RegistrationPin')>0){
+		that._handlingEvent('UserExists',message);
+	}else if(message.indexOf('Poke')>0){
+		that._handlingEvent('pokePassenger',message);
+	}else if(temp.indexOf('Status')==0){
+		that._handlingEvent('LoginPass',message);
+	}else if(type=='updateUserInfo'){
+		type='';
+		that._handlingEvent('userInfoUpdated',message);
+	}else if(message.indexOf('Registration')>0){
+		that._handlingEvent('RegWithPin',message);
+	}else if(message.indexOf('CountryCodes')>0){
+		that._handlingEvent('countries',message);
+	}else if(type=='ForgetPin'){
+		type='';
+		that._handlingEvent('ForgetPin',message);
+	}else if(message.indexOf('TripHistory')>0){
+		that._handlingEvent('gotHistory',message);
+	}else if(message.indexOf('PassengerCancel')>0){
+		that._handlingEvent('cancelTrip',message);
+	}else if(message.indexOf('DriverCancel')>0){
+		that._handlingEvent('cancelTrip',message);
+	}else if(message.indexOf('WhitePages')>0){
+		that._handlingEvent('profileInfo',message);
+	}else if(message.indexOf('Appointments')>0){
+		that._handlingEvent('gotAppoints',message);
+	}else if(message.indexOf('AssignmentConfirmation')>0){
+		that._handlingEvent('callAssigned',message);
+	}else if(message.indexOf('Shortage')>0){
+		that._handlingEvent('noDriver',message);
+	}else if(message.indexOf('FareUpdate')>0 &amp;&amp; message.indexOf('Complete')>0){
+		that._handlingEvent('callComplete',message);
+	}else if(message.indexOf('FareUpdate')>0 &amp;&amp; message.indexOf('Pickup')>0){
+		that._handlingEvent('passengerPickup',message);
+	}else if(message.indexOf('Appointment')>0 &amp;&amp; message.indexOf('gaddress')>0){
+		that._handlingEvent('appointmentRegistered',message);
+	}else if(message.indexOf('Appointment>')>0){
+		that._handlingEvent('appointmentCanceled',message);
+	}else if(message.indexOf('AppointmentInform')>0){
+		that._handlingEvent('appointmentStatusChanged',message);
+	}else if(message.indexOf('AppointmentRemind')>0){
+		that._handlingEvent('appointmentStatusChanged',message);
+	}else if(message.indexOf('PassengerNoShow')>0){
+		that._handlingEvent('cancelTrip',message);
+	}else if(message.indexOf('pass_blacklisted')>0){
+		that._handlingEvent('passBlacklist',message);
+	}else if(message.indexOf('Call')>0 &amp;&amp; message.indexOf('tripid')>0){
+		that._handlingEvent('callReceipt',message);
+	}else if(message.indexOf('ListFixedLocations')>0){
+		that._handlingEvent('receivedFixedLocations',message);
+	}else{
+		
+		that._handlingEvent('receivedData',message);
+		message=message.substr(message.indexOf('&lt;body>')+6);
+		message=message.substr(0,message.indexOf('&lt;/body>'));
+		Ti.API.error(message);
+	}
+	messageReceived=true;
+	if(messageSubmitWaitView){var hide_animation = Titanium.UI.createAnimation();
+	// this will set it in to view
+	hide_animation.bottom = -44;
+	// ... in half a second
+	hide_animation.duration = 500;
+	// then when you need it to 'appear' / pop up ... use:
+	messageSubmitWaitView.animate(hide_animation);messageSubmitWaitView.close();messageSubmitWaitView=null;}
+	return true;
+};
+/**
+ * @private 
+ * This function is used to setUp the connections to the xmpp module's events
+ * @param {Object} oCon - the xmpp object to be used to add the handlers
+ */
+function setupCon(oCon) {
+		oCon.unregisterHandler('message', handleMessage);
+		oCon.unregisterHandler('presence', debug);
+		oCon.unregisterHandler('iq', handleIQ);
+		oCon.unregisterHandler('onconnect', handleConnected);
+		oCon.unregisterHandler('onerror', disconnecting);
+		oCon.unregisterHandler('status_changed', disconnecting);
+		oCon.unregisterHandler('ondisconnect', disconnecting);
+		oCon.unregisterHandler('disconnecting', disconnecting);
+		oCon.unregisterHandler('iq', 'query', 'jabber:iq:version', handleIqVersion);
+		oCon.registerHandler('message', handleMessage);
+		oCon.registerHandler('presence', debug);
+		oCon.registerHandler('iq', handleIQ);
+		oCon.registerHandler('onconnect', handleConnected);
+		oCon.registerHandler('onerror', disconnecting);
+		oCon.registerHandler('status_changed', disconnecting);
+		oCon.registerHandler('ondisconnect', disconnecting);
+		oCon.registerHandler('disconnecting', disconnecting);
+		oCon.registerHandler('iq', 'query', 'jabber:iq:version', handleIqVersion);
+		oCon.registerIQGet('query', xmpp.CONSTANTS.NS_VERSION, handleIqVersion);
+		//oCon.registerIQGet('query', JXMPP.Constants.NS_TIME, handleIqTime);
+}
+/**
+ * @private
+ * this function shuts down the connection should an error occur
+ * @listens JXMPPConnection#onerror
+ * @param {Object} e - the error that occured
+ */
+var handleError=function (e) {
+		if (thing.connected())
+			thing.disconnect();
+};
+
+var loadingView;
+/**
+ * @private
+ * this function handles sending the presence of this user to the other XMPP users, also triggers an event informing anyone listening to it of a successfull connection, finally it closes the connection
+ * window that was opened from {@link xmppConnector#connect}
+ * @fires xmppConnector#connected
+ * @listens JXMPPConnection#onconnect
+ */
+var handleConnected=function () {
+		if(loadingView){
+			loadingView.close();
+			loadingView=null;
+		}
+		var pres=new xmpp.Packet.Presence();
+		pres.setPresence(0,'available',0);
+		thing.send(pres);
+		that._handlingEvent('connected',true);
+};
+
+	
+/**
+ * @private
+ * @param {Object} iq
+ */
+var handleIqVersion=function (iq) {
+		var x=[iq.buildNode('name', 'jsjac simpleclient'), 
+				iq.buildNode('version', 'i'+Ti.App.version), 
+				iq.buildNode('os', "navigator.userAgent")];
+		Ti.API.info("xxx:"+x);
+		var a=iq.reply(x);
+		thing.send(a);
+		return true;
+};
+
+var handleIQ=function (oIQ) {
+		thing.send(oIQ.errorReply(xmpp.CONSTANTS.ERR_FEATURE_NOT_IMPLEMENTED));
+
+};
+	
+	/**
+	 * @private
+ 	 * @param {String} message - the string to be sent to the XMPP server
+	 */
+	var sendMsg=function(message){ //(to,body) {
+  
+	    thing._sendRaw(message);
+		return true;
+	};
+	/**
+	 * @private
+	 * All of the messages are sent to this class and from there forwarded to {@link xmppConnector._handleMessages}
+ 	 * @param {String} message - the received message
+	 */
+	var handleMessage=function (message) {
+		that._handleMessages(message);
+	};
+	/**
+	 * @private
+	 * 
+ 	 * @param {Object} a
+	 */
+	var debug = function(a) {
+		Ti.API.info("Handled:" + a);
+		
+	};
+	
+	var disconnecting=function(a){
+		connectingView();
+		that._handlingEvent('disconnected');
+	};
+	
+	function connectingView(){
+		if(loadingView!=null)return;
+	loadingView=Ti.UI.createWindow({
+		width:Ti.UI.FILL,
+		height:Ti.UI.FILL,
+		top:0,
+		left:0,
+		backgroundColor:'#85000000',
+		navBarHidden:true
+	});
+	var style;
+	if (Ti.Platform.name === 'iPhone OS'){
+  		style = Ti.UI.iPhone.ActivityIndicatorStyle.BIG_DARK;
+	}
+	else {
+	  style = Ti.UI.ActivityIndicatorStyle.BIG_DARK;
+	  loadingView.addEventListener('open',function(){
+	  	this.activity.actionBar.hide();
+	  });
+	}
+	var activityIndicator = Ti.UI.createActivityIndicator({
+  		color: 'white',
+  		font: {fontFamily:'Roboto-Regular', fontSize:'30 sp'},
+  		message: L('connecting'),
+  		style:style,
+  		height:Ti.UI.SIZE,
+  		width:Ti.UI.SIZE
+	});
+	if(Ti.Platform.name=='android')loadingView.addEventListener('androidback',function(){return false;});
+	loadingView.add(activityIndicator);
+	activityIndicator.show();
+	loadingView.open();
+	}
+	
+	function submitViewiOS(){
+		if(messageSubmitWaitView!=null)return;
+	messageSubmitWaitView=Ti.UI.createWindow({
+		width:Ti.UI.FILL,
+		height:44,
+		bottom:-44,
+		left:0,
+		backgroundColor:'#85000000',
+		navBarHidden:true
+	});
+	var style;
+	if (Ti.Platform.name === 'iPhone OS'){
+  		style = Ti.UI.iPhone.ActivityIndicatorStyle.BIG_DARK;
+	}
+	else {
+	  style = Ti.UI.ActivityIndicatorStyle.BIG_DARK;
+	}
+	var activityIndicator = Ti.UI.createActivityIndicator({
+  		color: 'white',
+  		font: {fontFamily:'Roboto-Regular', fontSize:'20 sp'},
+  		style:style,
+  		message:L('networkDelay'),
+  		height:Ti.UI.SIZE,
+  		width:Ti.UI.SIZE
+	});
+	messageSubmitWaitView.add(activityIndicator);
+	activityIndicator.show();
+	var popup_animation = Titanium.UI.createAnimation();
+	// this will set it in to view
+	popup_animation.bottom = 50;
+	// ... in half a second
+	popup_animation.duration = 500;
+	// then when you need it to 'appear' / pop up ... use:
+	messageSubmitWaitView.open();
+	messageSubmitWaitView.animate(popup_animation);
+	};
+	
+if(Ti.Platform.name=='android')
+	module.exports = xmppConnector;
+else
+	exports = xmppConnector;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-JXMPP.html">JXMPP</a></li></ul><h3>Classes</h3><ul><li><a href="module-JXMPP.JXMPPConnection.html">JXMPPConnection</a></li><li><a href="module-JXMPP.JXMPPIQ.html">JXMPPIQ</a></li><li><a href="module-JXMPP.JXMPPJID.html">JXMPPJID</a></li><li><a href="module-JXMPP.JXMPPJIDInvalidException.html">JXMPPJIDInvalidException</a></li><li><a href="module-JXMPP.JXMPPMessage.html">JXMPPMessage</a></li><li><a href="module-JXMPP.JXMPPPacket.html">JXMPPPacket</a></li><li><a href="module-JXMPP.JXMPPPresence.html">JXMPPPresence</a></li><li><a href="module-JXMPP.xmppConnector.html">xmppConnector</a></li><li><a href="module-JXMPP.xmppMessages.html">xmppMessages</a></li></ul><h3>Events</h3><ul><li><a href="JXMPPConnection.html#event:connected">connected</a></li><li><a href="JXMPPConnection.html#event:disconnected">disconnected</a></li><li><a href="JXMPPConnection.html#event:message">message</a></li><li><a href="JXMPPConnection.html#event:ondisconnect">ondisconnect</a></li><li><a href="JXMPPConnection.html#event:onerror">onerror</a></li><li><a href="JXMPPConnection.html#event:sendRawCallBack">sendRawCallBack</a></li><li><a href="xmppConnector.html#event:appointmentCanceled">appointmentCanceled</a></li><li><a href="xmppConnector.html#event:appointmentRegistered">appointmentRegistered</a></li><li><a href="xmppConnector.html#event:appointmentStatusChanged">appointmentStatusChanged</a></li><li><a href="xmppConnector.html#event:callAssigned">callAssigned</a></li><li><a href="xmppConnector.html#event:callComplete">callComplete</a></li><li><a href="xmppConnector.html#event:callReceipt">callReceipt</a></li><li><a href="xmppConnector.html#event:cancelTrip">cancelTrip</a></li><li><a href="xmppConnector.html#event:countries">countries</a></li><li><a href="xmppConnector.html#event:ForgetPin">ForgetPin</a></li><li><a href="xmppConnector.html#event:gotAppoints">gotAppoints</a></li><li><a href="xmppConnector.html#event:gotHistory">gotHistory</a></li><li><a href="xmppConnector.html#event:LoginPass">LoginPass</a></li><li><a href="xmppConnector.html#event:noDriver">noDriver</a></li><li><a href="xmppConnector.html#event:passBlacklist">passBlacklist</a></li><li><a href="xmppConnector.html#event:passengerPickup">passengerPickup</a></li><li><a href="xmppConnector.html#event:pokePassenger">pokePassenger</a></li><li><a href="xmppConnector.html#event:profileInfo">profileInfo</a></li><li><a href="xmppConnector.html#event:receivedFixedLocations">receivedFixedLocations</a></li><li><a href="xmppConnector.html#event:RegWithPin">RegWithPin</a></li><li><a href="xmppConnector.html#event:updateUserInfo">updateUserInfo</a></li><li><a href="xmppConnector.html#event:UserExists">UserExists</a></li><li><a href="xmppConnector.html#event:userInfoUpdated">userInfoUpdated</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sun Sep 06 2015 12:58:41 GMT+0300 (EEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

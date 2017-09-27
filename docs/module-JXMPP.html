@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: JXMPP</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Module: JXMPP</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description">This is the main class of our XMPP module built in Javascript. It uses the Titanium TCP Socket module in order to establish a connection
+to the XMPP Jabber service. Until further notice there is no way to establish a connection while authenticating through SSL other than 
+simply checking the domain name that is being returned from the service to the device. This class contains 5 objects to 5 external classes
+that are inherrited to any instance of this class. There is no constructor for this class but all the inherrited classes need to be instantiated
+in order to be able to use them.</div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="xmpp1_JXMPP.js.html">xmpp1/JXMPP.js</a>, <a href="xmpp1_JXMPP.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Classes</h3>
+
+        <dl>
+            <dt><a href="module-JXMPP.JXMPPConnection.html">JXMPPConnection</a></dt>
+            <dd></dd>
+        
+            <dt><a href="module-JXMPP.JXMPPIQ.html">JXMPPIQ</a></dt>
+            <dd></dd>
+        
+            <dt><a href="module-JXMPP.JXMPPJID.html">JXMPPJID</a></dt>
+            <dd></dd>
+        
+            <dt><a href="module-JXMPP.JXMPPJIDInvalidException.html">JXMPPJIDInvalidException</a></dt>
+            <dd></dd>
+        
+            <dt><a href="module-JXMPP.JXMPPMessage.html">JXMPPMessage</a></dt>
+            <dd></dd>
+        
+            <dt><a href="module-JXMPP.JXMPPPacket.html">JXMPPPacket</a></dt>
+            <dd></dd>
+        
+            <dt><a href="module-JXMPP.JXMPPPresence.html">JXMPPPresence</a></dt>
+            <dd></dd>
+        
+            <dt><a href="module-JXMPP.xmppConnector.html">xmppConnector</a></dt>
+            <dd></dd>
+        
+            <dt><a href="module-JXMPP.xmppMessages.html">xmppMessages</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-JXMPP.html">JXMPP</a></li></ul><h3>Classes</h3><ul><li><a href="module-JXMPP.JXMPPConnection.html">JXMPPConnection</a></li><li><a href="module-JXMPP.JXMPPIQ.html">JXMPPIQ</a></li><li><a href="module-JXMPP.JXMPPJID.html">JXMPPJID</a></li><li><a href="module-JXMPP.JXMPPJIDInvalidException.html">JXMPPJIDInvalidException</a></li><li><a href="module-JXMPP.JXMPPMessage.html">JXMPPMessage</a></li><li><a href="module-JXMPP.JXMPPPacket.html">JXMPPPacket</a></li><li><a href="module-JXMPP.JXMPPPresence.html">JXMPPPresence</a></li><li><a href="module-JXMPP.xmppConnector.html">xmppConnector</a></li><li><a href="module-JXMPP.xmppMessages.html">xmppMessages</a></li></ul><h3>Events</h3><ul><li><a href="JXMPPConnection.html#event:connected">connected</a></li><li><a href="JXMPPConnection.html#event:disconnected">disconnected</a></li><li><a href="JXMPPConnection.html#event:message">message</a></li><li><a href="JXMPPConnection.html#event:ondisconnect">ondisconnect</a></li><li><a href="JXMPPConnection.html#event:onerror">onerror</a></li><li><a href="JXMPPConnection.html#event:sendRawCallBack">sendRawCallBack</a></li><li><a href="xmppConnector.html#event:appointmentCanceled">appointmentCanceled</a></li><li><a href="xmppConnector.html#event:appointmentRegistered">appointmentRegistered</a></li><li><a href="xmppConnector.html#event:appointmentStatusChanged">appointmentStatusChanged</a></li><li><a href="xmppConnector.html#event:callAssigned">callAssigned</a></li><li><a href="xmppConnector.html#event:callComplete">callComplete</a></li><li><a href="xmppConnector.html#event:callReceipt">callReceipt</a></li><li><a href="xmppConnector.html#event:cancelTrip">cancelTrip</a></li><li><a href="xmppConnector.html#event:countries">countries</a></li><li><a href="xmppConnector.html#event:ForgetPin">ForgetPin</a></li><li><a href="xmppConnector.html#event:gotAppoints">gotAppoints</a></li><li><a href="xmppConnector.html#event:gotHistory">gotHistory</a></li><li><a href="xmppConnector.html#event:LoginPass">LoginPass</a></li><li><a href="xmppConnector.html#event:noDriver">noDriver</a></li><li><a href="xmppConnector.html#event:passBlacklist">passBlacklist</a></li><li><a href="xmppConnector.html#event:passengerPickup">passengerPickup</a></li><li><a href="xmppConnector.html#event:pokePassenger">pokePassenger</a></li><li><a href="xmppConnector.html#event:profileInfo">profileInfo</a></li><li><a href="xmppConnector.html#event:receivedFixedLocations">receivedFixedLocations</a></li><li><a href="xmppConnector.html#event:RegWithPin">RegWithPin</a></li><li><a href="xmppConnector.html#event:updateUserInfo">updateUserInfo</a></li><li><a href="xmppConnector.html#event:UserExists">UserExists</a></li><li><a href="xmppConnector.html#event:userInfoUpdated">userInfoUpdated</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sun Sep 06 2015 12:58:41 GMT+0300 (EEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

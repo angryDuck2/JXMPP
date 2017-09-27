@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: xmppMessages.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: xmppMessages.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var securely = require('bencoding.securely');
+var imei=Ti.App.installId;
+
+/**
+ * @class
+ * @constructor
+ * @desc This is a class that creates all and any of the messages to send to the xmpp server
+ * @memberof module:JXMPP
+ */
+
+function xmppMessages(){
+	this.message_ret={
+		type:'',
+		string:''
+	};
+};
+/**
+ * This function creates the statuscheck message
+ * @param {Object} args
+ * @param {Number} args.mogile - the user's mobile number
+ * @param {String} args.user - the user's id
+ * @param {String} args.loc - the device's locale
+ * @param {String} args.country - the user's selected country
+ */
+xmppMessages.prototype.getLoginMessage= function(args){
+	var from=args.user;
+	if(Ti.Platform.osname=='android'){imei=require('ro.mihaiblaga.imei');imei=imei.getImei();}
+	var mobile=args.mobile;
+	var fulljid=from+'@driver.taxiplon.com/'+mobile;
+	var to='statuscheck.'+args.domain;
+	var uid=args.user;
+	var loc=args.loc;
+	var ver=Ti.App.version;
+	var receipt='';
+	if(Ti.Platform.getOsname()=='android'){
+		// var imeiCrypto = securely.createStringCrypto();
+		// var usingKey = securely.generateDerivedKey();  
+		// var aesEncryptedString = stringCrypto.AESEncrypt(usingKey,imei);
+		ver='b'+ver;
+	}else if(Ti.Platform.name=='iPhone OS'){
+		ver='y'+ver;
+	}else{
+		ver='w'+ver;
+	}
+	
+	if(args.receipt==true)receipt='&lt;request xmlns="urn:xmpp:receipts"/>';
+	var country=args.country;
+	var date=new Date();
+	date=date.getTime()-7200000;
+	var compId="";
+	if(Ti.App.Properties.getBool('companyId')==true)compId="&amp;companyId="+Ti.App.Properties.getString('companyIdContent');
+	var id=from.substring(1)+"|"+date;
+	if(Ti.Platform.getOsname()=='android'){
+		// var imeiCrypto = securely.createStringCrypto();
+		// var usingKey = securely.generateDerivedKey();  
+		// // var aesEncryptedString = stringCrypto.AESEncrypt(usingKey,id);
+		// id=aesEncryptedString;aesEncryptedString=null;
+	}
+	var message="&lt;?xml version='1.0' encoding='UTF-8'?>&lt;message id='"+id+"' from='"+fulljid+"/' to='"
+	+to+"'xml:lang='en'>&lt;body>uid="+uid+"&amp;loc="+loc+"&amp;ver="+ver+"&amp;country="+country+"&amp;imei="+imei+compId+"&lt;/body>"+receipt+"&lt;/message>";
+	this.message_ret.type='LoginPass';
+	this.message_ret.string=message;
+	return this.message_ret;
+};
+
+/**
+ * this function creates the second registration message to verify the pin entered by the user
+ * @param {Object} args
+ * @param {String} args.domain - the domain name of the server to send the message
+ * @param {String} args.webid - the user's id
+ * @param {String} args.country - the user's country
+ * @param {Number} args.mobile - the user's mobile number
+ * @param {String} args.passpin - the pin entered by the user in plaintext
+ */
+xmppMessages.prototype.getRegistrationMessage=function(args){
+	var from='registrar.'+args.domain+'/registrar';
+	if(Ti.Platform.osname=='android'){imei=require('ro.mihaiblaga.imei');imei=imei.getImei();}
+	var to='registerpassenger.'+args.domain;
+	var webid=args.webid;
+	var message;
+	// from=from+'@'+to+'/'+imei;
+	var ver=Ti.App.version;
+	var receipt='';
+	if(Ti.Platform.getOsname()=='android'){
+		ver='b'+ver;
+	}else if(Ti.Platform.name=='iPhone OS'){
+		ver='y'+ver;
+	}else{
+		ver='w'+ver;
+	}
+	if(args.receipt==true)receipt='&lt;request xmlns="urn:xmpp:receipts"/>';
+	var origin=args.country;
+	origin=origin.toUpperCase();
+	var webid;
+	var passpin=args.passpin;
+	mobile=args.mobile;
+	var date=new Date();
+	var compId="";
+	if(Ti.App.Properties.getBool('companyId')==true)compId="&amp;companyId="+Ti.App.Properties.getString('companyIdContent');
+	date=date.getTime()-7200000;
+	var id="registrar|"+date;
+	if(Ti.Platform.getOsname()=='android'){
+		// var imeiCrypto = securely.createStringCrypto();
+		// var usingKey = securely.generateDerivedKey();  
+		// // var aesEncryptedString = stringCrypto.AESEncrypt(usingKey,id);
+		// id=aesEncryptedString;aesEncryptedString=null;
+	}
+	message="&lt;?xml version='1.0' encoding='UTF-8'?>&lt;message id='"+id+"' from='"+from+" 'to='"
+			  +to+"'xml:lang='en'>&lt;body>act=acc&amp;imei="+imei+"&amp;ver="+ver+"&amp;origin="+origin+"&amp;id="+webid.substring(1)+"&amp;passpin="+passpin+"&amp;mobile="
+			  +mobile+compId+"&lt;/body>"+receipt+"&lt;/message>";
+
+	this.message_ret.type='RegWithPin';
+	this.message_ret.string=message;
+	return this.message_ret;
+};
+
+/**
+ * The message to get available countries for registration
+ * @param {Object} args
+ * @param {Object} args.domain - the domain to send the message to
+ */
+xmppMessages.prototype.getCountryListMessage=function(args){
+	if(Ti.Platform.osname=='android'){imei=require('ro.mihaiblaga.imei');imei=imei.getImei();}
+	var to = 'registerpassenger.'+args.domain;
+	var receipt='';
+	if(args.receipt==true)receipt='&lt;request xmlns="urn:xmpp:receipts"/>';
+	var date=new Date();
+	date=date.getTime()-7200000;
+	var id="registrar|"+date;
+	if(Ti.Platform.getOsname()=='android'){
+		// var imeiCrypto = securely.createStringCrypto();
+		// var usingKey = securely.generateDerivedKey();  
+		// // var aesEncryptedString = stringCrypto.AESEncrypt(usingKey,id);
+		// id=aesEncryptedString;aesEncryptedString=null;
+	}
+	var message="&lt;?xml version='1.0' encoding='UTF-8'?>&lt;message id='"+id+"' from='registrar@driver.taxiplon.com/registrar' to='"
+	+to+"' xml:lang='en'>&lt;body>act=country&lt;/body>"+receipt+"&lt;/message>";
+
+   	this.message_ret.type='countries';
+	this.message_ret.string=message;
+	return this.message_ret;
+};
+
+/**
+ * The message to request a new pin
+ * @param {Object} args
+ * @param {String} args.user - the user's id
+ * @param {String} args.loc - the device's locale
+ * @param {String} args.mobile - the user's mobile number
+ */
+xmppMessages.prototype.getForgotPin=function(args){
+	if(Ti.Platform.osname=='android'){imei=require('ro.mihaiblaga.imei');imei=imei.getImei();}
+	var to='registerpassenger.driver.taxiplon.com';
+	var webid=args.user;
+	var origin=args.loc;
+	var mobile=args.mobile;
+	var receipt='';
+	var date=new Date();
+	date=date.getTime()-7200000;
+	var id=imei+"|"+date;
+	if(Ti.Platform.getOsname()=='android'){
+		// var imeiCrypto = securely.createStringCrypto();
+		// var usingKey = securely.generateDerivedKey();  
+		// // var aesEncryptedString = stringCrypto.AESEncrypt(usingKey,id);
+		// id=aesEncryptedString;aesEncryptedString=null;
+	}
+	if(args.receipt==true)receipt='&lt;request xmlns="urn:xmpp:receipts"/>';
+	var message="&lt;?xml version='1.0' encoding='UTF-8'?>&lt;message id='"+id+"' from='registrar@driver.taxiplon.com/"
+	+imei+"' to='"+to+"' xml:lang='en'>&lt;body>act=forget&amp;mobile="+mobile+"&amp;loc="+origin+"&amp;webid="
+	+webid+"&amp;origin="+origin+"&lt;/body>"+receipt+"&lt;/message>";
+   	this.message_ret.type='ForgetPin';
+	this.message_ret.string=message;
+	return this.message_ret;
+};
+
+/**
+ * This function sends the first message for the registration of the user
+ * @param {Object} args
+ * @param {String} args.loc - the locale of the device
+ * @param {String} args.domain - the xmpp server domain
+ * @param {Number} args.mobile - the user's mobile number
+ * @param {String} args.country - the user's selected country
+ */
+xmppMessages.prototype.getIsUserRegisteredMessage=function(args){
+	var domain='registerpassenger.'+args.domain;
+	if(Ti.Platform.osname=='android'){imei=require('ro.mihaiblaga.imei');imei=imei.getImei();}
+	var loc=args.loc;
+	var ver=Ti.App.version;
+	var receipt='';
+	if(Ti.Platform.name=='android'){
+		ver='b'+ver;
+	}else if(Ti.Platform.name=='iPhone OS'){
+		ver='y'+ver;
+	}else{
+		ver='w'+ver;
+	}
+	var mobile=args.mobile;
+	var date=new Date();
+	date=date.getTime()-7200000;
+	if(args.receipt==true)receipt='&lt;request xmlns="urn:xmpp:receipts"/>';
+	var country=args.country;
+	var compId="";
+	if(Ti.App.Properties.getBool('companyId')==true)compId="&amp;companyId="+Ti.App.Properties.getString('companyIdContent');
+	var id=imei+"|"+date;
+	if(Ti.Platform.getOsname()=='android'){
+		// var imeiCrypto = securely.createStringCrypto();
+		// var usingKey = securely.generateDerivedKey();  
+		// // var aesEncryptedString = stringCrypto.AESEncrypt(usingKey,id);
+		// id=aesEncryptedString;aesEncryptedString=null;
+	}
+	var message="&lt;?xml version='1.0' encoding='UTF-8'?>&lt;message id='"+id+"' from='registrar@driver.taxiplon.com/registrar' to='"
+	+domain+"'  xml:lang='en'>&lt;body>act=pin&amp;imei="+imei+"&amp;origin="+country+"&amp;ver="+ver+"&amp;mobile="+mobile+"&amp;loc="+loc+compId+"&lt;/body>"+receipt+"&lt;/message>";
+
+    this.message_ret.type='RegisterPin';
+    this.message_ret.string=message;
+    return this.message_ret;
+};
+
+/**
+ * The message to get the user's history
+ * @param {Object} args
+ * @param {String} args.user - The user's id
+ * @param {String} args.domain - The xmpp server domain
+ * @param {Number} args.mobile - The user's mobile number
+ * @param {Number} args.first - The first element of the user's history
+ * @param {Number} args.last - The length of results to retrieve
+ * @param {String} args.view - This variable decides whether to get all of the history records or only the completed ones &lt;code>&lt;li>all - receive every records&lt;/li>&lt;li>&lt;null> receive only completed calls&lt;/li>&lt;/code>
+ */
+xmppMessages.prototype.getHistory=function(args){
+	var user=args.user;
+	var domain=args.domain;
+	var mobile=args.mobile;
+	var first=args.first;
+	var last=args.last;
+	var fulljid=user+'@'+domain+'/'+mobile;
+	if(Ti.Platform.osname=='android'){imei=require('ro.mihaiblaga.imei');imei=imei.getImei();}
+	var receipt='';
+	var date=new Date();
+	date=date.getTime()-7200000;
+	if(args.receipt==true)receipt='&lt;request xmlns="urn:xmpp:receipts"/>';
+	var id=user.substring(1)+"|"+date;
+	if(Ti.Platform.getOsname()=='android'){
+		// var imeiCrypto = securely.createStringCrypto();
+		// var usingKey = securely.generateDerivedKey();  
+		// // var aesEncryptedString = stringCrypto.AESEncrypt(usingKey,id);
+		// id=aesEncryptedString;aesEncryptedString=null;
+	}
+	var view=args.view || '';
+	var message="&lt;?xml version='1.0' encoding='UTF-8'?>&lt;message id='"+id+"' from='"+fulljid+"'to='triphistory.driver.taxiplon.com' xml:lang='en'>&lt;body>passid="+user.substr(1)+"&amp;imei="+imei+"&amp;first="+first+"&amp;last="+last+"&amp;view="+view+"&lt;/body>"+receipt+"&lt;/message>";
+
+   	this.message_ret.type='history';
+	this.message_ret.string=message;
+	return this.message_ret;
+};
+
+/**
+ * This function creates the message to get the user's information from the server 
+ * @param {Object} args
+ * @param {Number} args.mobile - the user's mobile number
+ */
+xmppMessages.prototype.getProfileInfo=function(args){
+		var user=args.user;
+	var mobile=args.mobile;
+	var fulljid='p'+user+'@driver.taxiplon.com/'+mobile;
+	var receipt='';
+	if(Ti.Platform.osname=='android'){imei=require('ro.mihaiblaga.imei');imei=imei.getImei();}
+	var date=new Date();
+	date=date.getTime()-7200000;
+	if(args.receipt==true)receipt='&lt;request xmlns="urn:xmpp:receipts"/>';
+	var id=user.substring(1)+"|"+date;
+	if(Ti.Platform.getOsname()=='android'){
+		// var imeiCrypto = securely.createStringCrypto();
+		// var usingKey = securely.generateDerivedKey();  
+		// // var aesEncryptedString = stringCrypto.AESEncrypt(usingKey,id);
+		// id=aesEncryptedString;aesEncryptedString=null;
+	}
+	var message="&lt;?xml version='1.0' encoding='UTF-8'?>&lt;message id='"+id+"' from='"+fulljid+"'to='whitepages.driver.taxiplon.com' xml:lang='en'>&lt;body>action=filterPass&amp;passid="+user+"&lt;/body>"+receipt+"&lt;/message>";
+
+   	this.message_ret.type='profileInfo';
+	this.message_ret.string=message;
+	return this.message_ret;
+
+};
+
+/**
+ * This function creates the message to get the user's appointments
+ * @param {Object} args
+ * @param {String} args.user - the user's id
+ * @param {Number} args.mobile - the user's phone number
+ */
+xmppMessages.prototype.getAppointments=function(args){
+	var user=args.user;
+	var mobile=args.mobile;
+	var fulljid=user+'@driver.taxiplon.com/'+mobile;
+	var receipt='';
+	if(Ti.Platform.osname=='android'){imei=require('ro.mihaiblaga.imei');imei=imei.getImei();}
+	var date=new Date();
+	date=date.getTime()-7200000;
+	if(args.receipt==true)receipt='&lt;request xmlns="urn:xmpp:receipts"/>';
+	var id=user.substring(1)+"|"+date;
+	if(Ti.Platform.getOsname()=='android'){
+		// var imeiCrypto = securely.createStringCrypto();
+		// var usingKey = securely.generateDerivedKey();  
+		// // var aesEncryptedString = stringCrypto.AESEncrypt(usingKey,id);
+		// id=aesEncryptedString;aesEncryptedString=null;
+	}
+	var message="&lt;?xml version='1.0' encoding='UTF-8'?>&lt;message id='"+id+"' from='"+fulljid+"'to='listappoints.driver.taxiplon.com' xml:lang='en'>&lt;body>passid="+user.substr(1)+"&lt;/body>"+receipt+"&lt;/message>";
+
+   	this.message_ret.type='appointments';
+	this.message_ret.string=message;
+	return this.message_ret;
+
+};
+
+/**
+ * This function creates the message to send taxi calls and appointments to the server
+ * @param {Object} args
+ * @param {String} args.user - the user's ID
+ * @param {Object} args.location - the coordinates of the user's location in the format: args.location.latitude,args.location.longitude
+ * @param {String} args.special - the special information to be sent to the driver including the passenger's room and name as well as any other info he has written
+ * @param {?String} args.dest - the user's destination
+ * @param {Number=} args.price - the price for this ride
+ * @param {Number} args.paymentType - the paymentType as a number where 0 is cash and 1 is credit
+ * @param {Timestamp} args.appoint - the timestamp for an appointment
+ * @param {String} args.country - the country of the user
+ * @param {Number} args.calltype - this call's calltype
+ */
+xmppMessages.prototype.placeCall=function(args){
+	var user=args.user;
+	var mobile=args.mobile;
+	var fulljid=user+'@driver.taxiplon.com/'+mobile;
+	var receipt='';
+	var coord=args.location;
+	var special=args.special || '';
+	var dest=args.dest || '';
+	var price=args.price || '' ;
+	var paymentType=args.paymentType==0 ? 'cash' : 'credit';
+	var appdate=args.appoint || '';
+	var country=args.country;
+	var compid='';
+	if(appdate!='')compid=1;
+	if(Ti.Platform.osname=='android'){imei=require('ro.mihaiblaga.imei');imei=imei.getImei();}
+	var calltype=args.calltype;
+	var date=new Date();
+	date=date.getTime()-7200000;
+	if(args.receipt==true)receipt='&lt;request xmlns="urn:xmpp:receipts"/>';
+	var id=user.substring(1)+"|"+date;
+	if(Ti.Platform.getOsname()=='android'){
+		// var imeiCrypto = securely.createStringCrypto();
+		// var usingKey = securely.generateDerivedKey();  
+		// // var aesEncryptedString = stringCrypto.AESEncrypt(usingKey,id);
+		// id=aesEncryptedString;aesEncryptedString=null;
+	}
+	var message="&lt;?xml version='1.0' encoding='UTF-8'?>&lt;message id='"+id+"' from='"+fulljid+
+	"'to='updatecall.driver.taxiplon.com' xml:lang='en'>&lt;body>id=&amp;uid="+user+"&amp;latlng="
+	+coord.latitude+','+coord.longitude+"&amp;addr="+coord.address+"&amp;special="+special+"&amp;dest="+dest+"&amp;price="+price+"&amp;appdate="
+	+appdate+"&amp;userid=&amp;driverid=&amp;agent=b&amp;country="+country+"&amp;paytype="+paymentType+"&amp;compid="+compid+"&amp;rangemulti=&amp;driverids=&amp;calltype="+calltype+"&lt;/body>"+receipt+"&lt;/message>";
+   	this.message_ret.type='newCall';
+	this.message_ret.string=message;
+	return this.message_ret;
+
+};
+/**
+ * This function create the message to cancel a call
+ * @param {Object} args
+ * @param {String} args.user - the user's ID
+ * @param {Number} args.mobile - the user's mobile phone
+ * @param {Number} args.callid - the ID of the call to be canceled
+ */
+xmppMessages.prototype.cancelCall=function(args){
+	var user=args.user;
+	var mobile=args.mobile;
+	var fulljid=user+'@driver.taxiplon.com/'+mobile;
+	var receipt='';
+	var callID=args.callid;
+	if(Ti.Platform.osname=='android'){imei=require('ro.mihaiblaga.imei');imei=imei.getImei();}
+	var date=new Date();
+	date=date.getTime()-7200000;
+	if(args.receipt==true)receipt='&lt;request xmlns="urn:xmpp:receipts"/>';
+	var id=user.substring(1)+"|"+date;
+	if(Ti.Platform.getOsname()=='android'){
+		// var imeiCrypto = securely.createStringCrypto();
+		// var usingKey = securely.generateDerivedKey();  
+		// // var aesEncryptedString = stringCrypto.AESEncrypt(usingKey,id);
+		// id=aesEncryptedString;aesEncryptedString=null;
+	}
+	var message="&lt;?xml version='1.0' encoding='UTF-8'?>&lt;message id='"+id+"' from='"+fulljid+
+	"'to='farecontrol.driver.taxiplon.com' xml:lang='en'>&lt;body>op=PassengerCancel&amp;id="+callID+"&lt;/body>"+receipt+"&lt;/message>";
+
+   	this.message_ret.type='cancelCall';
+	this.message_ret.string=message;
+	return this.message_ret;
+
+};
+
+/**
+ * This function creates the message to cancel an appointment
+ * @param {Object} args
+ * @param {String} args.user - the user's ID
+ * @param {Number} args.mobile - the user's mobile number
+ * @param {Number} args.callid - the ID of the appointment to be cancelled 
+ */
+xmppMessages.prototype.cancelAppoint=function(args){
+	var user=args.user;
+	var mobile=args.mobile;
+	var fulljid=user+'@driver.taxiplon.com/'+mobile;
+	var receipt='';
+	var callID=args.callid;
+	if(Ti.Platform.osname=='android'){imei=require('ro.mihaiblaga.imei');imei=imei.getImei();}
+	var date=new Date();
+	date=date.getTime()-7200000;
+	if(args.receipt==true)receipt='&lt;request xmlns="urn:xmpp:receipts"/>';
+	var id=user.substring(1)+"|"+date;
+	if(Ti.Platform.getOsname()=='android'){
+		// var imeiCrypto = securely.createStringCrypto();
+		// var usingKey = securely.generateDerivedKey();  
+		// // var aesEncryptedString = stringCrypto.AESEncrypt(usingKey,id);
+		// id=aesEncryptedString;aesEncryptedString=null;
+	}
+	var message="&lt;?xml version='1.0' encoding='UTF-8'?>&lt;message id='"+id+"' from='"+fulljid+
+	"'to='updatecall.driver.taxiplon.com' xml:lang='en'>&lt;body>id="+callID+"&amp;passid=0&amp;appdate=0&amp;driverid=0&lt;/body>"+receipt+"&lt;/message>";
+
+   	this.message_ret.type='cancelAppoint';
+	this.message_ret.string=message;
+	return this.message_ret;
+
+};
+/**
+ * This function creates the message to update the user's info
+ * @param {Object} args
+ * @param {String} args.user - the user's ID
+ * @param {Number} args.mobile - the user's mobile phone
+ * @param {String} args.name - the user's new name to be sent
+ * @param {String} args.surname - the user's new surname to be sent
+ * @param {String} args.email - the user's email to be sent
+ * @param {String} args.country - the user's selected country
+ */
+xmppMessages.prototype.savePassengerInformation=function(args){
+	var user=args.user;
+	var mobile=args.mobile;
+	var receipt='';
+	var fulljid=user+'@driver.taxiplon.com/'+mobile;
+	var date=new Date();
+	var name=args.name || '';
+	var surname=args.surname || '';
+	var email=args.email || '';
+	var country= args.country;
+	var address=args.address;
+	var date=new Date();
+	date=date.getTime()-7200000;
+	if(args.receipt==true)receipt='&lt;request xmlns="urn:xmpp:receipts"/>';
+	if(Ti.Platform.osname=='android'){imei=require('ro.mihaiblaga.imei');imei=imei.getImei();}
+	var id=user.substring(1)+"|"+date;
+	if(Ti.Platform.getOsname()=='android'){
+		// var imeiCrypto = securely.createStringCrypto();
+		// var usingKey = securely.generateDerivedKey();  
+		// // var aesEncryptedString = stringCrypto.AESEncrypt(usingKey,id);
+		// id=aesEncryptedString;aesEncryptedString=null;
+	}
+	var message="&lt;?xml version='1.0' encoding='UTF-8'?>&lt;message id='"+id+"' from='"+fulljid+
+	"'to='whitepages.driver.taxiplon.com'>&lt;body>action=createPass&amp;passid="+user.substring(1)+"&amp;name="+name+"&amp;surname="+surname+"&amp;email="+email+
+	"&amp;phone="+mobile+"&amp;nick="+user.toUpperCase()+"&amp;country="+country+"&amp;address="+address+"&lt;/body>"+receipt+"&lt;/message>";
+	
+	this.message_ret.type='updateUserInfo';
+	this.message_ret.string=message;
+	return this.message_ret;
+};
+
+/**
+ * This function creates the message to request the fixed price locations for this user
+ * @param {Object} args
+ * @param {String} args.user - the user's ID
+ * @param {Number} args.mobile - the user's mobile number
+ * @param {String} args.company - the user's companyID
+ */
+xmppMessages.prototype.getFixedPriceLocations=function(args){
+	var user=args.user;
+	var mobile=args.mobile;
+	var receipt='';
+	var company=args.company;
+	var fulljid=user+'@driver.taxiplon.com/'+mobile;
+	var date=new Date();
+	var date=new Date();
+	date=date.getTime()-7200000;
+	if(args.receipt==true)receipt='&lt;request xmlns="urn:xmpp:receipts"/>';
+	if(Ti.Platform.osname=='android'){imei=require('ro.mihaiblaga.imei');imei=imei.getImei();}
+	var id=user.substring(1)+"|"+date;
+	if(Ti.Platform.getOsname()=='android'){
+		// var imeiCrypto = securely.createStringCrypto();
+		// var usingKey = securely.generateDerivedKey();  
+		// // var aesEncryptedString = stringCrypto.AESEncrypt(usingKey,id);
+		// id=aesEncryptedString;aesEncryptedString=null;
+	}
+	var message="&lt;?xml version='1.0' encoding='UTF-8'?>&lt;message id='"+id+"' from='"+fulljid+
+	"'to='listfixedlocations.driver.taxiplon.com'>&lt;body>op=listfixedlocations&amp;b2bid="+user.substr(1)+"&amp;taxicompanyid="+company+"&lt;/body>"+receipt+"&lt;/message>";
+	
+	this.message_ret.type='listFixedLocations';
+	this.message_ret.string=message;
+	return this.message_ret;
+};
+module.exports=xmppMessages;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-JXMPP.html">JXMPP</a></li></ul><h3>Classes</h3><ul><li><a href="module-JXMPP.JXMPPConnection.html">JXMPPConnection</a></li><li><a href="module-JXMPP.JXMPPIQ.html">JXMPPIQ</a></li><li><a href="module-JXMPP.JXMPPJID.html">JXMPPJID</a></li><li><a href="module-JXMPP.JXMPPJIDInvalidException.html">JXMPPJIDInvalidException</a></li><li><a href="module-JXMPP.JXMPPMessage.html">JXMPPMessage</a></li><li><a href="module-JXMPP.JXMPPPacket.html">JXMPPPacket</a></li><li><a href="module-JXMPP.JXMPPPresence.html">JXMPPPresence</a></li><li><a href="module-JXMPP.xmppConnector.html">xmppConnector</a></li><li><a href="module-JXMPP.xmppMessages.html">xmppMessages</a></li></ul><h3>Events</h3><ul><li><a href="JXMPPConnection.html#event:connected">connected</a></li><li><a href="JXMPPConnection.html#event:disconnected">disconnected</a></li><li><a href="JXMPPConnection.html#event:message">message</a></li><li><a href="JXMPPConnection.html#event:ondisconnect">ondisconnect</a></li><li><a href="JXMPPConnection.html#event:onerror">onerror</a></li><li><a href="JXMPPConnection.html#event:sendRawCallBack">sendRawCallBack</a></li><li><a href="xmppConnector.html#event:appointmentCanceled">appointmentCanceled</a></li><li><a href="xmppConnector.html#event:appointmentRegistered">appointmentRegistered</a></li><li><a href="xmppConnector.html#event:appointmentStatusChanged">appointmentStatusChanged</a></li><li><a href="xmppConnector.html#event:callAssigned">callAssigned</a></li><li><a href="xmppConnector.html#event:callComplete">callComplete</a></li><li><a href="xmppConnector.html#event:callReceipt">callReceipt</a></li><li><a href="xmppConnector.html#event:cancelTrip">cancelTrip</a></li><li><a href="xmppConnector.html#event:countries">countries</a></li><li><a href="xmppConnector.html#event:ForgetPin">ForgetPin</a></li><li><a href="xmppConnector.html#event:gotAppoints">gotAppoints</a></li><li><a href="xmppConnector.html#event:gotHistory">gotHistory</a></li><li><a href="xmppConnector.html#event:LoginPass">LoginPass</a></li><li><a href="xmppConnector.html#event:noDriver">noDriver</a></li><li><a href="xmppConnector.html#event:passBlacklist">passBlacklist</a></li><li><a href="xmppConnector.html#event:passengerPickup">passengerPickup</a></li><li><a href="xmppConnector.html#event:pokePassenger">pokePassenger</a></li><li><a href="xmppConnector.html#event:profileInfo">profileInfo</a></li><li><a href="xmppConnector.html#event:receivedFixedLocations">receivedFixedLocations</a></li><li><a href="xmppConnector.html#event:RegWithPin">RegWithPin</a></li><li><a href="xmppConnector.html#event:updateUserInfo">updateUserInfo</a></li><li><a href="xmppConnector.html#event:UserExists">UserExists</a></li><li><a href="xmppConnector.html#event:userInfoUpdated">userInfoUpdated</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sun Sep 06 2015 12:58:41 GMT+0300 (EEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

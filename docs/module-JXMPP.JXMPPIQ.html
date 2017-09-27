@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: JXMPPIQ</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: JXMPPIQ</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+            <span class="ancestors"><a href="module-JXMPP.html">JXMPP</a>.</span>
+        
+        JXMPPIQ
+        </h2>
+        
+            <div class="class-description">Models the XMPP notion of an 'iq' packet</div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="JXMPPIQ"><span class="type-signature"></span>new JXMPPIQ<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    A jabber/XMPP iq packet
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="xmpp1_JXMPPPacket.js.html">xmpp1/JXMPPPacket.js</a>, <a href="xmpp1_JXMPPPacket.js.html#line530">line 530</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li>JXMPPPacket</li>
+    </ul>
+
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="getQuery"><span class="type-signature"></span>getQuery<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Gets the 'query' node of this packet
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="xmpp1_JXMPPPacket.js.html">xmpp1/JXMPPPacket.js</a>, <a href="xmpp1_JXMPPPacket.js.html#line586">line 586</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The query node
+</div>
+
+
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getQueryXMLNS"><span class="type-signature"></span>getQueryXMLNS<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Gets the XMLNS of the query node contained within this packet
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="xmpp1_JXMPPPacket.js.html">xmpp1/JXMPPPacket.js</a>, <a href="xmpp1_JXMPPPacket.js.html#line594">line 594</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The namespace of the query node
+</div>
+
+
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="reply"><span class="type-signature"></span>reply<span class="signature">(payload)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Creates an IQ reply with type set to 'result'. If given appends payload to first child if IQ. Payload maybe XML as string or a DOM element (or an array of such elements as well).
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>payload</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Element</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A payload to be appended [optional]</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="xmpp1_JXMPPPacket.js.html">xmpp1/JXMPPPacket.js</a>, <a href="xmpp1_JXMPPPacket.js.html#line608">line 608</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    An IQ reply packet
+</div>
+
+
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="setIQ"><span class="type-signature"></span>setIQ<span class="signature">(to, type, id)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Some combined method to set 'to', 'type' and 'id' at once
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>to</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the recepients JID</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A XMPP compliant iq type (one of 'set', 'get', 'result' and 'error'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A packet ID</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="xmpp1_JXMPPPacket.js.html">xmpp1/JXMPPPacket.js</a>, <a href="xmpp1_JXMPPPacket.js.html#line547">line 547</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    this
+</div>
+
+
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="setQuery"><span class="type-signature"></span>setQuery<span class="signature">(xmlns)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Creates a 'query' child node with given XMLNS
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>xmlns</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The namespace for the 'query' node</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="xmpp1_JXMPPPacket.js.html">xmpp1/JXMPPPacket.js</a>, <a href="xmpp1_JXMPPPacket.js.html#line562">line 562</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The query node
+</div>
+
+
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-JXMPP.html">JXMPP</a></li></ul><h3>Classes</h3><ul><li><a href="module-JXMPP.JXMPPConnection.html">JXMPPConnection</a></li><li><a href="module-JXMPP.JXMPPIQ.html">JXMPPIQ</a></li><li><a href="module-JXMPP.JXMPPJID.html">JXMPPJID</a></li><li><a href="module-JXMPP.JXMPPJIDInvalidException.html">JXMPPJIDInvalidException</a></li><li><a href="module-JXMPP.JXMPPMessage.html">JXMPPMessage</a></li><li><a href="module-JXMPP.JXMPPPacket.html">JXMPPPacket</a></li><li><a href="module-JXMPP.JXMPPPresence.html">JXMPPPresence</a></li><li><a href="module-JXMPP.xmppConnector.html">xmppConnector</a></li><li><a href="module-JXMPP.xmppMessages.html">xmppMessages</a></li></ul><h3>Events</h3><ul><li><a href="JXMPPConnection.html#event:connected">connected</a></li><li><a href="JXMPPConnection.html#event:disconnected">disconnected</a></li><li><a href="JXMPPConnection.html#event:message">message</a></li><li><a href="JXMPPConnection.html#event:ondisconnect">ondisconnect</a></li><li><a href="JXMPPConnection.html#event:onerror">onerror</a></li><li><a href="JXMPPConnection.html#event:sendRawCallBack">sendRawCallBack</a></li><li><a href="xmppConnector.html#event:appointmentCanceled">appointmentCanceled</a></li><li><a href="xmppConnector.html#event:appointmentRegistered">appointmentRegistered</a></li><li><a href="xmppConnector.html#event:appointmentStatusChanged">appointmentStatusChanged</a></li><li><a href="xmppConnector.html#event:callAssigned">callAssigned</a></li><li><a href="xmppConnector.html#event:callComplete">callComplete</a></li><li><a href="xmppConnector.html#event:callReceipt">callReceipt</a></li><li><a href="xmppConnector.html#event:cancelTrip">cancelTrip</a></li><li><a href="xmppConnector.html#event:countries">countries</a></li><li><a href="xmppConnector.html#event:ForgetPin">ForgetPin</a></li><li><a href="xmppConnector.html#event:gotAppoints">gotAppoints</a></li><li><a href="xmppConnector.html#event:gotHistory">gotHistory</a></li><li><a href="xmppConnector.html#event:LoginPass">LoginPass</a></li><li><a href="xmppConnector.html#event:noDriver">noDriver</a></li><li><a href="xmppConnector.html#event:passBlacklist">passBlacklist</a></li><li><a href="xmppConnector.html#event:passengerPickup">passengerPickup</a></li><li><a href="xmppConnector.html#event:pokePassenger">pokePassenger</a></li><li><a href="xmppConnector.html#event:profileInfo">profileInfo</a></li><li><a href="xmppConnector.html#event:receivedFixedLocations">receivedFixedLocations</a></li><li><a href="xmppConnector.html#event:RegWithPin">RegWithPin</a></li><li><a href="xmppConnector.html#event:updateUserInfo">updateUserInfo</a></li><li><a href="xmppConnector.html#event:UserExists">UserExists</a></li><li><a href="xmppConnector.html#event:userInfoUpdated">userInfoUpdated</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sun Sep 06 2015 12:58:41 GMT+0300 (EEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
